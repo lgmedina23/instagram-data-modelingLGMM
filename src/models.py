@@ -16,23 +16,15 @@ class User(Base):
     first_name = Column(String(120), nullable=False)
     last_name = Column(String(120), nullable=False)
     email = Column(String(120), nullable=False)
+    password = Column(String(250), nullable=False)
 
 
 class Follower(Base):
     __tablename__ = 'Follower'
-    user_from_id = Column(Integer, ForeignKey('user.id'))
-    user_from = relationship(User)
-    user_to_id = Column(Integer, ForeignKey('user.id'))
-    user_to = relationship(User)
-
-
-class Media(Base):
-    __tablename__ = 'Media'
     id = Column(Integer, primary_key=True)
-    type = Column(Enum)
-    url = Column(String(250))
-    post_id = Column(Integer, ForeignKey('post.id'))
-    post = relationship(Post)
+    user_from_id = Column(Integer, ForeignKey('user.id'))
+    user_to_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
     def to_dict(self):
         return {}
@@ -43,6 +35,16 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
+    caption = Column(String(250))
+
+
+class Media(Base):
+    __tablename__ = 'Media'
+    id = Column(Integer, primary_key=True)
+    type = Column(String)
+    url = Column(String(250))
+    post_id = Column(Integer, ForeignKey('post.id'))
+    post = relationship(Post)
 
 
 class Comment(Base):
@@ -50,9 +52,9 @@ class Comment(Base):
     id = Column(Integer, primary_key=True)
     comment_text = Column(String(250))
     author_id = Column(Integer, ForeignKey('user.id'))
-    author = relationship(User)
     post_id = Column(Integer, ForeignKey('post.id'))
     post = relationship(Post)
+    author = relationship(User)
 
 
 ## Draw from SQLAlchemy base
