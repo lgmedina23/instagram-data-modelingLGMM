@@ -10,7 +10,7 @@ Base = declarative_base()
 
 
 class Users(Base):
-    __tablename__ = 'Users'
+    __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     user_name = Column(String(250), nullable=False)
     first_name = Column(String(120), nullable=False)
@@ -20,7 +20,7 @@ class Users(Base):
 
 
 class Followers(Base):
-    __tablename__ = 'Followers'
+    __tablename__ = 'followers'
     id = Column(Integer, primary_key=True)
     user_from_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     user_to_id = Column(Integer, ForeignKey('users.id'), nullable=False)
@@ -31,7 +31,7 @@ class Followers(Base):
 
 
 class Posts(Base):
-    __tablename__ = 'Posts'
+    __tablename__ = 'posts'
     id = Column(Integer, primary_key=True)
     caption = Column(String(250))
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
@@ -42,7 +42,7 @@ class Posts(Base):
 
 
 class Media(Base):
-    __tablename__ = 'Media'
+    __tablename__ = 'media'
     id = Column(Integer, primary_key=True)
     type = Column(String)
     url = Column(String(250))
@@ -54,7 +54,7 @@ class Media(Base):
 
 
 class Comments(Base):
-    __tablename__ = 'Comments'
+    __tablename__ = 'comments'
     id = Column(Integer, primary_key=True)
     comment_text = Column(String(250), nullable=False)
     author_id = Column(Integer, ForeignKey('users.id'), nullable=False)
