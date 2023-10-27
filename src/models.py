@@ -9,33 +9,36 @@ from eralchemy2 import render_er
 Base = declarative_base()
 
 
-class User(Base):
-    __tablename__ = 'User'
+class Users(Base):
+    __tablename__ = 'Users'
     id = Column(Integer, primary_key=True)
     user_name = Column(String(250), nullable=False)
     first_name = Column(String(120), nullable=False)
-    last_name = Column(String(120), nullable=False)
+    last_name = Column(String(120))
     email = Column(String(120), nullable=False)
     password = Column(String(250), nullable=False)
 
 
-class Follower(Base):
-    __tablename__ = 'Follower'
+class Followers(Base):
+    __tablename__ = 'Followers'
     id = Column(Integer, primary_key=True)
-    user_from_id = Column(Integer, ForeignKey('user.id'))
-    user_to_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User)
+    user_from_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    user_to_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    user = relationship(Users)
 
     def to_dict(self):
         return {}
 
 
-class Post(Base):
-    __tablename__ = 'Post'
+class Posts(Base):
+    __tablename__ = 'Posts'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User)
     caption = Column(String(250))
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    user = relationship(Users)
+
+    def to_dict(self):
+        return {}
 
 
 class Media(Base):
@@ -43,18 +46,24 @@ class Media(Base):
     id = Column(Integer, primary_key=True)
     type = Column(String)
     url = Column(String(250))
-    post_id = Column(Integer, ForeignKey('post.id'))
-    post = relationship(Post)
+    post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
+    post = relationship(Posts)
+
+    def to_dict(self):
+        return {}
 
 
-class Comment(Base):
-    __tablename__ = 'Comment'
+class Comments(Base):
+    __tablename__ = 'Comments'
     id = Column(Integer, primary_key=True)
-    comment_text = Column(String(250))
-    author_id = Column(Integer, ForeignKey('user.id'))
-    post_id = Column(Integer, ForeignKey('post.id'))
-    post = relationship(Post)
-    author = relationship(User)
+    comment_text = Column(String(250), nullable=False)
+    author_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
+    post = relationship(Posts, foreign_keys=[post_id])
+    author = relationship(Users, foreign_keys=[author_id])
+
+    def to_dict(self):
+        return {}
 
 
 ## Draw from SQLAlchemy base
